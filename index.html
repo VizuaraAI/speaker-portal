@@ -259,8 +259,9 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">LinkedIn Profile</label>
-          <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/..." />
+          <label class="form-label">LinkedIn Profile <span class="req">*</span></label>
+          <input type="url" id="f-linkedin" required placeholder="https://linkedin.com/in/..." />
+          <div class="error-text" id="err-linkedin">Please enter your LinkedIn profile URL.</div>
         </div>
 
         <div class="form-group">
@@ -445,6 +446,7 @@
 
       const name = document.getElementById('f-name').value.trim();
       const email = document.getElementById('f-email').value.trim();
+      const linkedin = document.getElementById('f-linkedin').value.trim();
       const company = document.getElementById('f-company').value.trim();
       const role = document.getElementById('f-role').value.trim();
       const experience = document.getElementById('f-experience').value;
@@ -456,6 +458,7 @@
 
       if (!name) { valid = showError('f-name', 'err-name'); }
       if (!email || !email.includes('@')) { valid = showError('f-email', 'err-email'); }
+      if (!linkedin || !linkedin.includes('linkedin.com')) { valid = showError('f-linkedin', 'err-linkedin'); }
       if (!company) { valid = showError('f-company', 'err-company'); }
       if (!role) { valid = showError('f-role', 'err-role'); }
       if (!experience) { valid = showError('f-experience', 'err-experience'); }
@@ -480,7 +483,7 @@
       const data = {
         full_name: name,
         email: email,
-        linkedin_url: document.getElementById('f-linkedin').value.trim() || null,
+        linkedin_url: linkedin,
         company: company,
         role: role,
         expertise_areas: expertise,

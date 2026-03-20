@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin — Speaker Applications</title>
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Figtree', system-ui, sans-serif; background: #f5f5f5; color: #1a1a1a; line-height: 1.5; }
@@ -15,9 +14,10 @@
     .auth-box img { height:48px; margin-bottom:16px; }
     .auth-box h2 { font-size:22px; font-weight:700; margin-bottom:6px; }
     .auth-box p { font-size:13px; color:#737373; margin-bottom:20px; }
-    .auth-input { width:100%; padding:12px 16px; border:1px solid #d4d4d4; border-radius:10px; font-family:'Figtree'; font-size:15px; margin-bottom:14px; outline:none; }
+    .auth-input { width:100%; padding:12px 16px; border:1px solid #d4d4d4; border-radius:10px; font-family:'Figtree'; font-size:15px; margin-bottom:14px; outline:none; text-align:center; }
     .auth-input:focus { border-color:#7c3aed; box-shadow:0 0 0 3px rgba(124,58,237,0.1); }
     .auth-btn { width:100%; padding:12px; background:#7c3aed; color:white; border:none; border-radius:10px; font-family:'Figtree'; font-size:15px; font-weight:600; cursor:pointer; }
+    .auth-btn:hover { background:#6d28d9; }
     .auth-error { color:#dc2626; font-size:13px; margin-top:8px; display:none; }
 
     .dashboard { display:none; }
@@ -45,7 +45,7 @@
     th { text-align:left; padding:10px 14px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color:#737373; background:#fafafa; border-bottom:1px solid #e5e5e5; }
     td { padding:12px 14px; font-size:14px; border-bottom:1px solid #f0f0f0; vertical-align:top; }
     tr:last-child td { border-bottom:none; }
-    tr:hover { background:#fafafa; cursor:pointer; }
+    tr.clickable:hover { background:#fafafa; cursor:pointer; }
     .nm { font-weight:600; }
     .badge { display:inline-block; padding:2px 10px; border-radius:6px; font-size:11px; font-weight:600; }
     .b-pending { background:#fef3c7; color:#92400e; }
@@ -58,6 +58,7 @@
     .li-link { color:#0a66c2; text-decoration:none; font-size:12px; }
     .empty { text-align:center; padding:60px 24px; color:#737373; }
     .empty h3 { font-size:18px; font-weight:600; color:#1a1a1a; margin-bottom:6px; }
+    .loading { text-align:center; padding:40px; color:#737373; font-size:14px; }
 
     .overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.4); z-index:1000; align-items:center; justify-content:center; }
     .overlay.show { display:flex; }
@@ -69,7 +70,8 @@
     .mv { font-size:15px; }
     .modal-close { position:absolute; top:16px; right:20px; background:none; border:none; font-size:22px; cursor:pointer; color:#737373; }
     .modal-btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
-    .mbtn { padding:7px 16px; border-radius:8px; font-family:'Figtree'; font-size:13px; font-weight:600; cursor:pointer; border:none; }
+    .mbtn { padding:7px 16px; border-radius:8px; font-family:'Figtree'; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:opacity 0.15s; }
+    .mbtn:hover { opacity:0.85; }
   </style>
 </head>
 <body>
@@ -80,7 +82,7 @@
       <h2>Admin Dashboard</h2>
       <p>Enter password to view speaker applications.</p>
       <input type="password" class="auth-input" id="pw" placeholder="Password" autofocus />
-      <button class="auth-btn" id="auth-btn">Sign In</button>
+      <button class="auth-btn" id="auth-btn" onclick="doAuth()">Sign In</button>
       <div class="auth-error" id="auth-error">Incorrect password.</div>
     </div>
   </div>
@@ -92,172 +94,223 @@
         <h1>Speaker Applications</h1>
       </div>
       <div class="dash-nav-right">
-        <button class="btn-sm" id="refresh-btn">↻ Refresh</button>
-        <button class="btn-sm" id="csv-btn">↓ Export CSV</button>
+        <button class="btn-sm" onclick="loadData()">Refresh</button>
+        <button class="btn-sm" onclick="exportCSV()">Export CSV</button>
       </div>
     </nav>
-
     <div class="stats-bar" id="stats-bar"></div>
-    <div class="filters" id="filters"></div>
+    <div class="filters" id="filters-bar"></div>
     <div class="table-wrap">
-      <table><thead><tr>
+      <div class="loading" id="loading">Loading applications...</div>
+      <table style="display:none" id="main-table"><thead><tr>
         <th>Name</th><th>Company</th><th>Topic</th><th>Expertise</th><th>Format</th><th>Status</th><th>Date</th>
       </tr></thead><tbody id="tbody"></tbody></table>
       <div class="empty" id="empty" style="display:none"><h3>No applications yet</h3><p>Share the application form to start receiving submissions.</p></div>
     </div>
   </div>
 
-  <div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+  <div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal" id="modal"></div>
+  </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    const PASS = 'vizuara2026';
-    const sb = window.supabase.createClient(
-      'https://nujomdlpnppspssmdtdf.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51am9tZGxwbnBwc3Bzc21kdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODM1NjQsImV4cCI6MjA4OTU1OTU2NH0.M5W_nNFLlMhRevc8XuGu_AwEH38_kPy-MqYbcX8RMYc'
-    );
+    // ─── Config ────────────────────────────────────
+    var PASS = 'vizuara2026';
+    var SUPA_URL = 'https://nujomdlpnppspssmdtdf.supabase.co';
+    var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51am9tZGxwbnBwc3Bzc21kdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODM1NjQsImV4cCI6MjA4OTU1OTU2NH0.M5W_nNFLlMhRevc8XuGu_AwEH38_kPy-MqYbcX8RMYc';
 
-    let data = [], filter = 'all', query = '';
+    var db = null;
+    var speakers = [];
+    var currentFilter = 'all';
+    var searchQuery = '';
 
-    // Auth
-    document.getElementById('auth-btn').addEventListener('click', doAuth);
-    document.getElementById('pw').addEventListener('keypress', e => { if(e.key==='Enter') doAuth(); });
+    // ─── Init Supabase ─────────────────────────────
+    try {
+      if (typeof supabase !== 'undefined' && supabase.createClient) {
+        db = supabase.createClient(SUPA_URL, SUPA_KEY);
+      } else if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+        db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+      }
+    } catch(e) {
+      console.error('Supabase init failed:', e);
+    }
+
+    // ─── Auth ──────────────────────────────────────
+    document.getElementById('pw').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') doAuth();
+    });
 
     function doAuth() {
-      if (document.getElementById('pw').value === PASS) {
+      var pw = document.getElementById('pw').value;
+      if (pw === PASS) {
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
-        load();
+        loadData();
       } else {
         document.getElementById('auth-error').style.display = 'block';
+        setTimeout(function() { document.getElementById('auth-error').style.display = 'none'; }, 3000);
       }
     }
 
-    // Load
-    async function load() {
-      const { data: rows, error } = await sb.from('speakers').select('*').order('created_at', { ascending: false });
-      if (error) { alert('Error: ' + error.message); return; }
-      data = rows || [];
-      renderStats();
-      renderFilters();
-      renderTable();
+    // ─── Load Data ─────────────────────────────────
+    function loadData() {
+      if (!db) { alert('Supabase not initialized. Check console for errors.'); return; }
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('main-table').style.display = 'none';
+
+      db.from('speakers').select('*').order('created_at', { ascending: false })
+        .then(function(result) {
+          if (result.error) { alert('Error loading: ' + result.error.message); return; }
+          speakers = result.data || [];
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById('main-table').style.display = 'table';
+          renderStats();
+          renderFilters();
+          renderTable();
+        })
+        .catch(function(err) { alert('Failed to load: ' + err.message); });
     }
 
-    document.getElementById('refresh-btn').addEventListener('click', load);
-    document.getElementById('csv-btn').addEventListener('click', exportCSV);
-
+    // ─── Stats ─────────────────────────────────────
     function renderStats() {
-      const c = { total:data.length, pending:0, reviewing:0, selected:0, confirmed:0, declined:0 };
-      data.forEach(s => { if(c[s.status]!==undefined) c[s.status]++; });
-      document.getElementById('stats-bar').innerHTML = `
-        <div class="stat-card"><div class="stat-num" style="color:#7c3aed">${c.total}</div><div class="stat-label">Total</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:#f59e0b">${c.pending}</div><div class="stat-label">Pending</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:#2563eb">${c.reviewing}</div><div class="stat-label">Reviewing</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:#059669">${c.selected+c.confirmed}</div><div class="stat-label">Selected</div></div>
-        <div class="stat-card"><div class="stat-num" style="color:#dc2626">${c.declined}</div><div class="stat-label">Declined</div></div>`;
+      var c = { total: speakers.length, pending: 0, reviewing: 0, selected: 0, confirmed: 0, declined: 0 };
+      speakers.forEach(function(s) { if (c[s.status] !== undefined) c[s.status]++; });
+      document.getElementById('stats-bar').innerHTML =
+        '<div class="stat-card"><div class="stat-num" style="color:#7c3aed">' + c.total + '</div><div class="stat-label">Total</div></div>' +
+        '<div class="stat-card"><div class="stat-num" style="color:#f59e0b">' + c.pending + '</div><div class="stat-label">Pending</div></div>' +
+        '<div class="stat-card"><div class="stat-num" style="color:#2563eb">' + c.reviewing + '</div><div class="stat-label">Reviewing</div></div>' +
+        '<div class="stat-card"><div class="stat-num" style="color:#059669">' + (c.selected + c.confirmed) + '</div><div class="stat-label">Selected</div></div>' +
+        '<div class="stat-card"><div class="stat-num" style="color:#dc2626">' + c.declined + '</div><div class="stat-label">Declined</div></div>';
     }
 
+    // ─── Filters ───────────────────────────────────
     function renderFilters() {
-      const statuses = ['all','pending','reviewing','selected','confirmed','declined'];
-      document.getElementById('filters').innerHTML =
-        statuses.map(s => `<button class="fbtn ${filter===s?'on':''}" data-f="${s}">${s.charAt(0).toUpperCase()+s.slice(1)}</button>`).join('') +
-        `<input type="text" class="search" placeholder="Search name, company, topic..." value="${query}" />`;
-      document.querySelectorAll('.fbtn').forEach(b => b.addEventListener('click', () => { filter=b.dataset.f; renderFilters(); renderTable(); }));
-      document.querySelector('.search').addEventListener('input', e => { query=e.target.value.toLowerCase(); renderTable(); });
+      var statuses = ['all', 'pending', 'reviewing', 'selected', 'confirmed', 'declined'];
+      var html = '';
+      statuses.forEach(function(s) {
+        var cls = currentFilter === s ? 'fbtn on' : 'fbtn';
+        html += '<button class="' + cls + '" onclick="setFilter(\'' + s + '\')">' + s.charAt(0).toUpperCase() + s.slice(1) + '</button>';
+      });
+      html += '<input type="text" class="search" placeholder="Search name, company, topic..." value="' + searchQuery + '" oninput="doSearch(this.value)" />';
+      document.getElementById('filters-bar').innerHTML = html;
     }
 
+    function setFilter(f) { currentFilter = f; renderFilters(); renderTable(); }
+    function doSearch(q) { searchQuery = q.toLowerCase(); renderTable(); }
+
+    // ─── Table ─────────────────────────────────────
     function renderTable() {
-      let rows = data;
-      if (filter !== 'all') rows = rows.filter(s => s.status === filter);
-      if (query) rows = rows.filter(s =>
-        [s.full_name,s.company,s.suggested_topic,(s.expertise_areas||[]).join(' ')].join(' ').toLowerCase().includes(query)
-      );
+      var rows = speakers;
+      if (currentFilter !== 'all') rows = rows.filter(function(s) { return s.status === currentFilter; });
+      if (searchQuery) rows = rows.filter(function(s) {
+        var txt = [s.full_name, s.company, s.suggested_topic, (s.expertise_areas || []).join(' ')].join(' ').toLowerCase();
+        return txt.indexOf(searchQuery) !== -1;
+      });
 
-      const empty = document.getElementById('empty');
-      const tbody = document.getElementById('tbody');
+      var tbody = document.getElementById('tbody');
+      var empty = document.getElementById('empty');
 
-      if (!rows.length) { tbody.innerHTML=''; empty.style.display='block'; return; }
-      empty.style.display='none';
+      if (rows.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+      empty.style.display = 'none';
 
-      tbody.innerHTML = rows.map(s => {
-        const tags = (s.expertise_areas||[]).slice(0,3).map(e=>`<span class="tag">${e}</span>`).join('');
-        const extra = (s.expertise_areas||[]).length > 3 ? `<span class="tag">+${s.expertise_areas.length-3}</span>` : '';
-        const dt = new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-        const bc = 'b-'+(s.status||'pending');
-        return `<tr data-id="${s.id}">
-          <td><div class="nm">${s.full_name}</div><div style="font-size:12px;color:#737373">${s.role}</div>
-            ${s.email?`<a href="mailto:${s.email}" class="email-link" onclick="event.stopPropagation()">${s.email}</a>`:''}</td>
-          <td>${s.company}${s.linkedin_url?`<br><a href="${s.linkedin_url}" target="_blank" class="li-link" onclick="event.stopPropagation()">LinkedIn →</a>`:''}</td>
-          <td style="max-width:220px">${s.suggested_topic||'—'}</td>
-          <td>${tags}${extra}</td>
-          <td style="font-size:12px;white-space:nowrap">${s.session_format?s.session_format.split('(')[0].trim():'—'}</td>
-          <td><span class="badge ${bc}">${s.status||'pending'}</span></td>
-          <td style="font-size:12px;color:#737373;white-space:nowrap">${dt}</td>
-        </tr>`;
-      }).join('');
+      var html = '';
+      rows.forEach(function(s) {
+        var tags = (s.expertise_areas || []).slice(0, 3).map(function(e) { return '<span class="tag">' + e + '</span>'; }).join('');
+        var extra = (s.expertise_areas || []).length > 3 ? '<span class="tag">+' + ((s.expertise_areas || []).length - 3) + '</span>' : '';
+        var dt = new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        var bc = 'b-' + (s.status || 'pending');
+        var fmt = s.session_format ? s.session_format.split('(')[0].trim() : '—';
 
-      document.querySelectorAll('#tbody tr').forEach(tr => tr.addEventListener('click', () => showModal(tr.dataset.id)));
+        html += '<tr class="clickable" onclick="showModal(\'' + s.id + '\')">' +
+          '<td><div class="nm">' + s.full_name + '</div><div style="font-size:12px;color:#737373">' + s.role + '</div>' +
+          (s.email ? '<a href="mailto:' + s.email + '" class="email-link" onclick="event.stopPropagation()">' + s.email + '</a>' : '') + '</td>' +
+          '<td>' + s.company + (s.linkedin_url ? '<br><a href="' + s.linkedin_url + '" target="_blank" class="li-link" onclick="event.stopPropagation()">LinkedIn</a>' : '') + '</td>' +
+          '<td style="max-width:220px">' + (s.suggested_topic || '—') + '</td>' +
+          '<td>' + tags + extra + '</td>' +
+          '<td style="font-size:12px;white-space:nowrap">' + fmt + '</td>' +
+          '<td><span class="badge ' + bc + '">' + (s.status || 'pending') + '</span></td>' +
+          '<td style="font-size:12px;color:#737373;white-space:nowrap">' + dt + '</td></tr>';
+      });
+      tbody.innerHTML = html;
     }
 
-    // Modal
+    // ─── Modal ─────────────────────────────────────
     function showModal(id) {
-      const s = data.find(x=>x.id===id);
-      if(!s) return;
-      const m = document.getElementById('modal');
-      const field = (label,val) => val ? `<div class="mf"><div class="ml">${label}</div><div class="mv">${val}</div></div>` : '';
-      m.innerHTML = `
-        <button class="modal-close" onclick="closeModal()">✕</button>
-        <h2>${s.full_name}</h2>
-        <div class="modal-meta">${s.role} at ${s.company} · Applied ${new Date(s.created_at).toLocaleDateString()}</div>
-        ${field('Email',`<a href="mailto:${s.email}" style="color:#7c3aed">${s.email}</a>`)}
-        ${field('LinkedIn',s.linkedin_url?`<a href="${s.linkedin_url}" target="_blank" style="color:#0a66c2">${s.linkedin_url}</a>`:'')}
-        ${field('Website',s.website_url?`<a href="${s.website_url}" target="_blank" style="color:#7c3aed">${s.website_url}</a>`:'')}
-        ${field('Expertise',(s.expertise_areas||[]).map(e=>`<span class="tag">${e}</span>`).join(' '))}
-        ${field('Suggested Topic',`<strong>${s.suggested_topic}</strong>`)}
-        ${field('Topic Description',s.topic_description)}
-        ${field('Session Format',s.session_format)}
-        ${field('Preferred Dates',s.preferred_dates)}
-        ${field('Bio',s.bio)}
-        ${field('How Heard',s.how_heard)}
-        ${field('Additional Notes',s.additional_notes)}
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5;">
-          <div class="ml">Update Status</div>
-          <div class="modal-btns">
-            <button class="mbtn" style="background:#fef3c7;color:#92400e" onclick="setStatus('${s.id}','pending')">Pending</button>
-            <button class="mbtn" style="background:#dbeafe;color:#1e40af" onclick="setStatus('${s.id}','reviewing')">Reviewing</button>
-            <button class="mbtn" style="background:#d1fae5;color:#065f46" onclick="setStatus('${s.id}','selected')">Select</button>
-            <button class="mbtn" style="background:#ede9fe;color:#5b21b6" onclick="setStatus('${s.id}','confirmed')">Confirm</button>
-            <button class="mbtn" style="background:#fee2e2;color:#991b1b" onclick="setStatus('${s.id}','declined')">Decline</button>
-          </div>
-        </div>
-        <div style="margin-top:14px;">
-          <div class="ml">Admin Notes</div>
-          <textarea id="notes-${s.id}" style="width:100%;padding:8px 12px;border:1px solid #d4d4d4;border-radius:8px;font-family:Figtree;font-size:14px;margin-top:4px;min-height:60px;outline:none;">${s.admin_notes||''}</textarea>
-          <button class="mbtn" style="background:#f5f5f5;border:1px solid #e5e5e5;margin-top:6px;" onclick="saveNotes('${s.id}')">Save Notes</button>
-        </div>`;
+      var s = speakers.find(function(x) { return x.id === id; });
+      if (!s) return;
+      var m = document.getElementById('modal');
+      var h = '<button class="modal-close" onclick="closeModal()">✕</button>';
+      h += '<h2>' + s.full_name + '</h2>';
+      h += '<div class="modal-meta">' + s.role + ' at ' + s.company + ' · Applied ' + new Date(s.created_at).toLocaleDateString() + '</div>';
+
+      function field(label, val) { return val ? '<div class="mf"><div class="ml">' + label + '</div><div class="mv">' + val + '</div></div>' : ''; }
+
+      h += field('Email', '<a href="mailto:' + s.email + '" style="color:#7c3aed">' + s.email + '</a>');
+      if (s.linkedin_url) h += field('LinkedIn', '<a href="' + s.linkedin_url + '" target="_blank" style="color:#0a66c2">' + s.linkedin_url + '</a>');
+      if (s.website_url) h += field('Website', '<a href="' + s.website_url + '" target="_blank" style="color:#7c3aed">' + s.website_url + '</a>');
+      h += field('Expertise', (s.expertise_areas || []).map(function(e) { return '<span class="tag">' + e + '</span>'; }).join(' '));
+      h += field('Suggested Topic', '<strong>' + s.suggested_topic + '</strong>');
+      if (s.topic_description) h += field('Topic Description', s.topic_description);
+      h += field('Session Format', s.session_format);
+      if (s.preferred_dates) h += field('Preferred Dates', s.preferred_dates);
+      if (s.bio) h += field('Bio', s.bio);
+      if (s.how_heard) h += field('How Heard', s.how_heard);
+      if (s.additional_notes) h += field('Additional Notes', s.additional_notes);
+
+      h += '<div style="margin-top:20px;padding-top:16px;border-top:1px solid #e5e5e5;">';
+      h += '<div class="ml">Update Status</div><div class="modal-btns">';
+      h += '<button class="mbtn" style="background:#fef3c7;color:#92400e" onclick="setStatus(\'' + id + '\',\'pending\')">Pending</button>';
+      h += '<button class="mbtn" style="background:#dbeafe;color:#1e40af" onclick="setStatus(\'' + id + '\',\'reviewing\')">Reviewing</button>';
+      h += '<button class="mbtn" style="background:#d1fae5;color:#065f46" onclick="setStatus(\'' + id + '\',\'selected\')">Select</button>';
+      h += '<button class="mbtn" style="background:#ede9fe;color:#5b21b6" onclick="setStatus(\'' + id + '\',\'confirmed\')">Confirm</button>';
+      h += '<button class="mbtn" style="background:#fee2e2;color:#991b1b" onclick="setStatus(\'' + id + '\',\'declined\')">Decline</button>';
+      h += '</div></div>';
+
+      h += '<div style="margin-top:14px;"><div class="ml">Admin Notes</div>';
+      h += '<textarea id="anotes" style="width:100%;padding:8px 12px;border:1px solid #d4d4d4;border-radius:8px;font-family:Figtree;font-size:14px;margin-top:4px;min-height:60px;outline:none;">' + (s.admin_notes || '') + '</textarea>';
+      h += '<button class="mbtn" style="background:#f5f5f5;border:1px solid #e5e5e5;margin-top:6px;" onclick="saveNotes(\'' + id + '\')">Save Notes</button></div>';
+
+      m.innerHTML = h;
       document.getElementById('overlay').classList.add('show');
     }
 
     function closeModal() { document.getElementById('overlay').classList.remove('show'); }
-    document.getElementById('overlay').addEventListener('click', e => { if(e.target.id==='overlay') closeModal(); });
 
-    async function setStatus(id,status) {
-      await sb.from('speakers').update({status}).eq('id',id);
-      const s=data.find(x=>x.id===id); if(s)s.status=status;
-      renderStats(); renderTable(); closeModal();
+    function setStatus(id, status) {
+      db.from('speakers').update({ status: status }).eq('id', id)
+        .then(function() {
+          var s = speakers.find(function(x) { return x.id === id; });
+          if (s) s.status = status;
+          renderStats(); renderTable(); closeModal();
+        });
     }
 
-    async function saveNotes(id) {
-      const notes=document.getElementById('notes-'+id).value;
-      await sb.from('speakers').update({admin_notes:notes}).eq('id',id);
-      const s=data.find(x=>x.id===id); if(s)s.admin_notes=notes;
-      alert('Notes saved.');
+    function saveNotes(id) {
+      var notes = document.getElementById('anotes').value;
+      db.from('speakers').update({ admin_notes: notes }).eq('id', id)
+        .then(function() {
+          var s = speakers.find(function(x) { return x.id === id; });
+          if (s) s.admin_notes = notes;
+          alert('Notes saved.');
+        });
     }
 
     function exportCSV() {
-      const h=['Name','Email','Company','Role','Topic','Expertise','Format','Status','Dates','Bio','LinkedIn','Website','Notes','Applied'];
-      const rows=data.map(s=>[s.full_name,s.email,s.company,s.role,s.suggested_topic,(s.expertise_areas||[]).join('; '),s.session_format,s.status,s.preferred_dates,s.bio,s.linkedin_url,s.website_url,s.additional_notes,new Date(s.created_at).toLocaleDateString()]);
-      const csv=[h,...rows].map(r=>r.map(c=>`"${(c||'').replace(/"/g,'""')}"`).join(',')).join('\n');
-      const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='speaker_applications.csv'; a.click();
+      var h = ['Name','Email','LinkedIn','Company','Role','Topic','Expertise','Format','Status','Dates','Bio','Website','Notes','Applied'];
+      var rows = speakers.map(function(s) {
+        return [s.full_name, s.email, s.linkedin_url, s.company, s.role, s.suggested_topic,
+          (s.expertise_areas||[]).join('; '), s.session_format, s.status,
+          s.preferred_dates, s.bio, s.website_url, s.additional_notes,
+          new Date(s.created_at).toLocaleDateString()];
+      });
+      var csv = [h].concat(rows).map(function(r) {
+        return r.map(function(c) { return '"' + (c || '').replace(/"/g, '""') + '"'; }).join(',');
+      }).join('\n');
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+      a.download = 'speaker_applications.csv';
+      a.click();
     }
   </script>
 </body>
