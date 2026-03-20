@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Speaker Application — Vizuara Inference Engineering Workshop</title>
-  <meta name="description" content="Apply to be a guest speaker at Vizuara AI Labs' Inference Engineering Workshop for 200+ ML engineers." />
+  <title>Speak at Vizuara Workshops — Guest Speaker Application</title>
+  <meta name="description" content="Apply to be a guest speaker at Vizuara AI Labs workshops. Share your expertise with hundreds of engineers." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -14,172 +14,156 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Figtree', system-ui, sans-serif;
-      background: #fafafa;
-      color: #1a1a1a;
-      line-height: 1.6;
+      background: #fafafa; color: #1a1a1a; line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #fafafa; }
     ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
 
-    /* ─── Layout ───────────────────────────────────── */
     .container { max-width: 680px; margin: 0 auto; padding: 0 24px; }
 
-    /* ─── Nav ──────────────────────────────────────── */
+    /* ── Nav ─────────────────────────────────────── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       background: rgba(250,250,250,0.92);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid #e5e5e5;
-      padding: 14px 32px;
+      padding: 10px 32px;
       display: flex; align-items: center; justify-content: space-between;
     }
     .nav-brand { display: flex; align-items: center; gap: 10px; }
-    .nav-logo {
-      width: 32px; height: 32px; border-radius: 8px;
-      background: linear-gradient(135deg, #7c3aed, #db2777);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-weight: 700; font-size: 14px;
-    }
+    .nav-brand img { height: 36px; }
     .nav-name { font-weight: 600; font-size: 15px; }
 
-    /* ─── Hero ─────────────────────────────────────── */
-    .hero {
-      padding: 140px 24px 60px;
-      text-align: center;
-      max-width: 700px; margin: 0 auto;
-    }
+    /* ── Hero ─────────────────────────────────────── */
+    .hero { padding: 130px 24px 48px; text-align: center; max-width: 700px; margin: 0 auto; }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 6px 16px; border-radius: 100px;
-      border: 1px solid rgba(124,58,237,0.2);
-      background: rgba(124,58,237,0.06);
-      font-size: 13px; font-weight: 500; color: #7c3aed;
-      margin-bottom: 24px;
+      border: 1px solid rgba(124,58,237,0.2); background: rgba(124,58,237,0.06);
+      font-size: 13px; font-weight: 500; color: #7c3aed; margin-bottom: 24px;
     }
-    .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: #059669; }
+    .hero-dot { width: 6px; height: 6px; border-radius: 50%; background: #059669; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
     .hero h1 {
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 700; line-height: 1.15;
-      letter-spacing: -1.5px; margin-bottom: 16px;
+      font-size: clamp(30px, 5vw, 46px); font-weight: 700;
+      line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 16px;
     }
     .hero h1 span {
       background: linear-gradient(135deg, #7c3aed, #db2777);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .hero p { font-size: 17px; color: #525252; max-width: 540px; margin: 0 auto 12px; }
+    .hero p { font-size: 17px; color: #525252; max-width: 560px; margin: 0 auto; }
 
-    /* ─── Compensation Banner ──────────────────────── */
-    .comp-banner {
-      max-width: 680px; margin: 0 auto 48px;
-      padding: 20px 28px;
-      background: linear-gradient(135deg, rgba(124,58,237,0.06), rgba(219,39,119,0.06));
-      border: 1px solid rgba(124,58,237,0.15);
-      border-radius: 14px;
-      display: flex; align-items: center; gap: 16px;
-      flex-wrap: wrap; justify-content: center;
-    }
-    .comp-amount {
-      font-size: 28px; font-weight: 700; color: #7c3aed;
-    }
-    .comp-text { font-size: 15px; color: #525252; }
-
-    /* ─── Form ─────────────────────────────────────── */
-    .form-section { padding: 0 24px 100px; max-width: 680px; margin: 0 auto; }
-    .form-card {
-      background: white;
-      border: 1px solid #e5e5e5;
-      border-radius: 16px;
-      padding: 40px;
+    /* ── Compensation ─────────────────────────────── */
+    .comp-section { max-width: 680px; margin: 32px auto 40px; padding: 0 24px; }
+    .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .comp-card {
+      background: white; border: 1px solid #e5e5e5; border-radius: 14px;
+      padding: 24px; text-align: center;
       box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
-    .form-title {
-      font-size: 22px; font-weight: 700; margin-bottom: 4px;
+    .comp-card-label { font-size: 13px; font-weight: 600; color: #737373; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+    .comp-card-amount { font-size: 36px; font-weight: 700; color: #7c3aed; }
+    .comp-card-desc { font-size: 14px; color: #525252; margin-top: 4px; }
+
+    /* ── Info Cards ────────────────────────────────── */
+    .info-section { padding: 0 24px 48px; max-width: 680px; margin: 0 auto; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .info-card {
+      background: white; border: 1px solid #e5e5e5; border-radius: 12px;
+      padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
+    .info-card-icon { font-size: 22px; margin-bottom: 8px; }
+    .info-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .info-card p { font-size: 13px; color: #737373; line-height: 1.5; }
+
+    /* ── Requirement Banner ────────────────────────── */
+    .req-banner {
+      max-width: 680px; margin: 0 auto 40px; padding: 0 24px;
+    }
+    .req-banner-inner {
+      padding: 16px 24px; background: #fef7ee; border: 1px solid #fed7aa;
+      border-radius: 12px; font-size: 14px; color: #9a3412;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    /* ── Form ──────────────────────────────────────── */
+    .form-section { padding: 0 24px 100px; max-width: 680px; margin: 0 auto; }
+    .form-card {
+      background: white; border: 1px solid #e5e5e5; border-radius: 16px;
+      padding: 40px; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .form-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
     .form-subtitle { font-size: 14px; color: #737373; margin-bottom: 32px; }
     .form-group { margin-bottom: 24px; }
-    .form-label {
-      display: block; font-size: 14px; font-weight: 600;
-      margin-bottom: 6px; color: #1a1a1a;
-    }
+    .form-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: #1a1a1a; }
     .form-label .req { color: #db2777; }
     .form-hint { font-size: 12px; color: #737373; margin-top: 4px; }
-    input[type="text"], input[type="email"], input[type="url"], textarea, select {
+
+    input[type="text"], input[type="email"], input[type="url"], input[type="number"], textarea, select {
       width: 100%; padding: 12px 16px;
       border: 1px solid #d4d4d4; border-radius: 10px;
       font-family: 'Figtree', system-ui; font-size: 15px;
       color: #1a1a1a; background: #fafafa;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none;
     }
-    input:focus, textarea:focus, select:focus {
-      border-color: #7c3aed;
-      box-shadow: 0 0 0 3px rgba(124,58,237,0.1);
-    }
+    input:focus, textarea:focus, select:focus { border-color: #7c3aed; box-shadow: 0 0 0 3px rgba(124,58,237,0.1); }
+    input.error, textarea.error, select.error { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
+    .error-text { font-size: 12px; color: #dc2626; margin-top: 4px; display: none; }
     textarea { resize: vertical; min-height: 100px; }
-    .checkbox-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 8px; margin-top: 8px;
-    }
-    .checkbox-item {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 12px; border-radius: 8px;
+
+    /* ── Checkboxes ────────────────────────────────── */
+    .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .cb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 8px;
       border: 1px solid #e5e5e5; cursor: pointer;
-      transition: all 0.2s;
-      font-size: 14px; color: #525252;
+      transition: all 0.15s; font-size: 14px; color: #525252;
+      user-select: none;
     }
-    .checkbox-item:hover { border-color: #7c3aed; background: rgba(124,58,237,0.03); }
-    .checkbox-item.checked { border-color: #7c3aed; background: rgba(124,58,237,0.06); color: #7c3aed; }
-    .checkbox-item input { display: none; }
-    .check-icon {
-      width: 18px; height: 18px; border-radius: 4px;
-      border: 1.5px solid #d4d4d4;
+    .cb-item:hover { border-color: #a78bfa; background: rgba(124,58,237,0.02); }
+    .cb-item.active { border-color: #7c3aed; background: rgba(124,58,237,0.06); color: #5b21b6; font-weight: 500; }
+    .cb-box {
+      width: 20px; height: 20px; border-radius: 5px;
+      border: 2px solid #d4d4d4; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 11px; color: white; transition: all 0.2s;
-      flex-shrink: 0;
+      transition: all 0.15s;
     }
-    .checkbox-item.checked .check-icon {
-      background: #7c3aed; border-color: #7c3aed;
-    }
+    .cb-item.active .cb-box { background: #7c3aed; border-color: #7c3aed; }
+    .cb-check { display: none; color: white; font-size: 12px; font-weight: 700; }
+    .cb-item.active .cb-check { display: block; }
 
     .divider { height: 1px; background: #e5e5e5; margin: 32px 0; }
 
     .submit-btn {
-      width: 100%; padding: 16px;
-      background: #7c3aed; color: white;
-      border: none; border-radius: 12px;
-      font-family: 'Figtree'; font-size: 16px; font-weight: 600;
-      cursor: pointer; transition: all 0.3s;
-      box-shadow: 0 4px 20px rgba(124,58,237,0.25);
+      width: 100%; padding: 16px; background: #7c3aed; color: white;
+      border: none; border-radius: 12px; font-family: 'Figtree';
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: all 0.3s; box-shadow: 0 4px 20px rgba(124,58,237,0.25);
     }
     .submit-btn:hover { background: #6d28d9; transform: translateY(-1px); }
-    .submit-btn:disabled { background: #a78bfa; cursor: not-allowed; transform: none; }
+    .submit-btn:disabled { background: #a78bfa; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    .success-msg {
-      text-align: center; padding: 48px 24px;
-      display: none;
+    .success-msg { text-align: center; padding: 60px 24px; display: none; }
+    .success-icon { font-size: 56px; margin-bottom: 20px; }
+    .success-msg h2 { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+    .success-msg p { font-size: 16px; color: #525252; line-height: 1.7; }
+
+    /* ── Toast ──────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: #1a1a1a; color: white; padding: 14px 28px; border-radius: 12px;
+      font-size: 14px; font-weight: 500; z-index: 9999;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.2);
     }
-    .success-icon { font-size: 48px; margin-bottom: 16px; }
-    .success-msg h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
-    .success-msg p { font-size: 15px; color: #525252; }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.error { background: #dc2626; }
 
-    /* ─── Info Cards ───────────────────────────────── */
-    .info-section { padding: 0 24px 60px; max-width: 680px; margin: 0 auto; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .info-card {
-      background: white; border: 1px solid #e5e5e5;
-      border-radius: 14px; padding: 24px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-    }
-    .info-card-icon { font-size: 24px; margin-bottom: 10px; }
-    .info-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-    .info-card p { font-size: 13px; color: #737373; line-height: 1.5; }
-
-    /* ─── Footer ───────────────────────────────────── */
     footer {
-      padding: 32px; text-align: center;
-      border-top: 1px solid #e5e5e5;
+      padding: 32px; text-align: center; border-top: 1px solid #e5e5e5;
       font-size: 13px; color: #737373;
     }
     footer a { color: #7c3aed; text-decoration: none; }
@@ -187,8 +171,8 @@
     @media (max-width: 600px) {
       .checkbox-grid { grid-template-columns: 1fr; }
       .info-grid { grid-template-columns: 1fr; }
+      .comp-grid { grid-template-columns: 1fr; }
       .form-card { padding: 24px; }
-      .comp-banner { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
@@ -196,33 +180,34 @@
 
   <nav>
     <div class="nav-brand">
-      <div class="nav-logo">V</div>
+      <img src="vizuara-logo.png" alt="Vizuara" />
       <span class="nav-name">Vizuara AI Labs</span>
     </div>
-    <a href="https://vizuaraai.github.io/inference-engineering-visual-guides/" target="_blank"
-       style="font-size:13px; color:#7c3aed; font-weight:600; text-decoration:none;">
-      View Curriculum →
-    </a>
+    <a href="https://vizuara.ai" target="_blank" style="font-size:13px;color:#7c3aed;font-weight:600;text-decoration:none;">vizuara.ai →</a>
   </nav>
 
   <!-- Hero -->
   <section class="hero">
-    <div class="hero-badge">
-      <span class="hero-dot"></span>
-      Accepting speaker applications
-    </div>
-    <h1>Speak at our<br><span>Inference Engineering Workshop</span></h1>
-    <p>Share your expertise with 200+ ML engineers learning the full inference stack — from transformer internals to edge deployment.</p>
-    <p style="font-size:14px; color:#737373; margin-top:8px;">
-      If selected, you'll deliver a 60–90 minute live session.
-    </p>
+    <div class="hero-badge"><span class="hero-dot"></span> Accepting applications</div>
+    <h1>Speak at<br><span>Vizuara Workshops</span></h1>
+    <p>Share your industry expertise with hundreds of engineers learning AI, LLMs, GPU systems, and more — across our intensive bootcamps and workshops.</p>
   </section>
 
   <!-- Compensation -->
-  <div class="comp-banner">
-    <div class="comp-amount">$300 – $500</div>
-    <div class="comp-text">compensation per session for selected speakers</div>
-  </div>
+  <section class="comp-section">
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-card-label">Guest Lecture</div>
+        <div class="comp-card-amount">$300</div>
+        <div class="comp-card-desc">90-minute live session + Q&A</div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-card-label">Hands-On Workshop</div>
+        <div class="comp-card-amount">$500</div>
+        <div class="comp-card-desc">3-hour hands-on lab session</div>
+      </div>
+    </div>
+  </section>
 
   <!-- What you get -->
   <section class="info-section">
@@ -230,25 +215,33 @@
       <div class="info-card">
         <div class="info-card-icon">🎯</div>
         <h3>Technical audience</h3>
-        <p>200+ engineers who already understand transformers, quantization, and KV cache. Real questions, not basics.</p>
+        <p>200+ engineers per cohort who come prepared. Real questions, not basics.</p>
       </div>
       <div class="info-card">
         <div class="info-card-icon">📣</div>
-        <h3>Promotion</h3>
-        <p>Your name, bio, and links featured across our website, YouTube, LinkedIn, and all workshop materials.</p>
+        <h3>Full promotion</h3>
+        <p>Your name, bio, and links across our website, YouTube, LinkedIn, and all materials.</p>
       </div>
       <div class="info-card">
         <div class="info-card-icon">🎬</div>
-        <h3>Recording</h3>
-        <p>Your session recorded and shared with all participants — extended reach for your work and ideas.</p>
+        <h3>Recorded session</h3>
+        <p>Your talk recorded and shared with all participants for extended reach.</p>
       </div>
       <div class="info-card">
         <div class="info-card-icon">🗓️</div>
         <h3>Flexible scheduling</h3>
-        <p>Sessions run April–May 2026. We'll find a time that works for your schedule.</p>
+        <p>We'll find a time that works for you. Sessions run on Zoom.</p>
       </div>
     </div>
   </section>
+
+  <!-- Requirement -->
+  <div class="req-banner">
+    <div class="req-banner-inner">
+      <span style="font-size:20px;">⚡</span>
+      <span>We look for speakers with <strong>at least 2–3 years of industry experience</strong> in AI/ML, LLMs, GPU systems, or related fields. Academic researchers with relevant publications are also welcome.</span>
+    </div>
+  </div>
 
   <!-- Form -->
   <section class="form-section">
@@ -256,150 +249,103 @@
       <div class="form-title">Speaker Application</div>
       <div class="form-subtitle">Fill out the form below. We'll review and get back within 48 hours.</div>
 
-      <form id="speaker-form">
-        <!-- Personal Info -->
+      <form id="speaker-form" novalidate>
         <div class="form-group">
           <label class="form-label">Full Name <span class="req">*</span></label>
-          <input type="text" name="full_name" required placeholder="e.g. Dr. Jane Smith" />
+          <input type="text" id="f-name" required placeholder="e.g. Dr. Jane Smith" />
+          <div class="error-text" id="err-name">Please enter your full name.</div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Email <span class="req">*</span></label>
-          <input type="email" name="email" required placeholder="jane@company.com" />
+          <input type="email" id="f-email" required placeholder="jane@company.com" />
+          <div class="error-text" id="err-email">Please enter a valid email address.</div>
         </div>
 
         <div class="form-group">
           <label class="form-label">LinkedIn Profile</label>
-          <input type="url" name="linkedin_url" placeholder="https://linkedin.com/in/..." />
+          <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/..." />
         </div>
 
         <div class="form-group">
           <label class="form-label">Company / Organization <span class="req">*</span></label>
-          <input type="text" name="company" required placeholder="e.g. NVIDIA, Meta, Sarvam AI, Stanford" />
+          <input type="text" id="f-company" required placeholder="e.g. NVIDIA, Meta, Sarvam AI, IIT Madras" />
+          <div class="error-text" id="err-company">Please enter your company or organization.</div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Your Role / Title <span class="req">*</span></label>
-          <input type="text" name="role" required placeholder="e.g. Senior Research Engineer, Assistant Professor" />
+          <input type="text" id="f-role" required placeholder="e.g. Senior Research Engineer, Assistant Professor" />
+          <div class="error-text" id="err-role">Please enter your role or title.</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Years of Industry / Research Experience <span class="req">*</span></label>
+          <select id="f-experience" required>
+            <option value="">Select...</option>
+            <option value="1-2 years">1–2 years</option>
+            <option value="2-3 years">2–3 years</option>
+            <option value="3-5 years">3–5 years</option>
+            <option value="5-10 years">5–10 years</option>
+            <option value="10+ years">10+ years</option>
+          </select>
+          <div class="error-text" id="err-experience">Please select your experience level.</div>
+          <div class="form-hint">We typically look for speakers with 2+ years of hands-on experience.</div>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Expertise -->
         <div class="form-group">
           <label class="form-label">Areas of Expertise <span class="req">*</span></label>
-          <div class="form-hint">Select all that apply</div>
-          <div class="checkbox-grid" id="expertise-grid">
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="GPU Architecture & CUDA" />
-              <span class="check-icon">✓</span>
-              GPU Architecture & CUDA
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Quantization & Compression" />
-              <span class="check-icon">✓</span>
-              Quantization & Compression
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="LLM Serving (vLLM, TRT-LLM)" />
-              <span class="check-icon">✓</span>
-              LLM Serving (vLLM, TRT-LLM)
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Speculative Decoding" />
-              <span class="check-icon">✓</span>
-              Speculative Decoding
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Edge / On-Device Inference" />
-              <span class="check-icon">✓</span>
-              Edge / On-Device Inference
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Voice Pipelines (ASR/TTS)" />
-              <span class="check-icon">✓</span>
-              Voice Pipelines (ASR/TTS)
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="KV Cache & Memory Optimization" />
-              <span class="check-icon">✓</span>
-              KV Cache & Memory Optimization
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="ML Frameworks (MLX, PyTorch)" />
-              <span class="check-icon">✓</span>
-              ML Frameworks (MLX, PyTorch)
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Custom AI Hardware" />
-              <span class="check-icon">✓</span>
-              Custom AI Hardware
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="LLMOps & Production Systems" />
-              <span class="check-icon">✓</span>
-              LLMOps & Production Systems
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Fine-Tuning & Distillation" />
-              <span class="check-icon">✓</span>
-              Fine-Tuning & Distillation
-            </label>
-            <label class="checkbox-item" onclick="toggleCheck(this)">
-              <input type="checkbox" value="Multimodal Inference" />
-              <span class="check-icon">✓</span>
-              Multimodal Inference
-            </label>
-          </div>
+          <div class="form-hint" style="margin-bottom:8px;">Select all that apply</div>
+          <div class="checkbox-grid" id="expertise-grid"></div>
+          <div class="error-text" id="err-expertise">Please select at least one area of expertise.</div>
         </div>
 
         <div class="form-group">
-          <label class="form-label">Suggested Talk Topic <span class="req">*</span></label>
-          <input type="text" name="suggested_topic" required placeholder="e.g. 'FlashAttention: From Research to Industry Standard'" />
-          <div class="form-hint">What would you like to present on? One sentence is fine.</div>
+          <label class="form-label">Suggested Talk / Workshop Topic <span class="req">*</span></label>
+          <input type="text" id="f-topic" required placeholder="e.g. 'FlashAttention: From Research to Industry Standard'" />
+          <div class="error-text" id="err-topic">Please suggest a topic for your session.</div>
         </div>
 
         <div class="form-group">
           <label class="form-label">Topic Description</label>
-          <textarea name="topic_description" placeholder="A brief description of what you'd cover, key takeaways for students, and any demos you might include (optional)"></textarea>
+          <textarea id="f-topic-desc" placeholder="What you'd cover, key takeaways, and any demos you might include (optional)"></textarea>
         </div>
 
         <div class="divider"></div>
 
-        <!-- Availability -->
+        <div class="form-group">
+          <label class="form-label">Session Type Preference <span class="req">*</span></label>
+          <select id="f-format" required>
+            <option value="">Select...</option>
+            <option value="90-min guest lecture ($300)">90-minute guest lecture — $300</option>
+            <option value="3-hour hands-on workshop ($500)">3-hour hands-on workshop — $500</option>
+            <option value="Either">Open to either format</option>
+          </select>
+          <div class="error-text" id="err-format">Please select a session format.</div>
+        </div>
+
         <div class="form-group">
           <label class="form-label">Preferred Dates / Availability</label>
-          <input type="text" name="preferred_dates" placeholder="e.g. 'Any weekday in May', 'April 25 or May 2'" />
-          <div class="form-hint">Workshop runs April 15 – May 30, 2026. Sessions are 60–90 min on Zoom.</div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Session Format Preference</label>
-          <select name="session_format">
-            <option value="60-90 min live talk + Q&A">60–90 min live talk + Q&A</option>
-            <option value="Hands-on lab / live coding">Hands-on lab / live coding (2–3 hours)</option>
-            <option value="Panel discussion">Panel discussion with other speakers</option>
-            <option value="Pre-recorded talk">Pre-recorded talk + live Q&A</option>
-            <option value="Flexible">Flexible — open to suggestions</option>
-          </select>
+          <input type="text" id="f-dates" placeholder="e.g. 'Any weekday in May', 'Flexible'" />
         </div>
 
         <div class="divider"></div>
 
-        <!-- Bio -->
         <div class="form-group">
           <label class="form-label">Short Bio</label>
-          <textarea name="bio" placeholder="2-3 sentences about yourself that we can use to introduce you to students (optional)"></textarea>
+          <textarea id="f-bio" placeholder="2-3 sentences about yourself that we can use to introduce you (optional)"></textarea>
         </div>
 
         <div class="form-group">
           <label class="form-label">Website / Portfolio</label>
-          <input type="url" name="website_url" placeholder="https://yourwebsite.com" />
+          <input type="url" id="f-website" placeholder="https://yourwebsite.com" />
         </div>
 
         <div class="form-group">
-          <label class="form-label">How did you hear about this?</label>
-          <select name="how_heard">
+          <label class="form-label">How did you hear about Vizuara?</label>
+          <select id="f-how">
             <option value="">Select...</option>
             <option value="LinkedIn">LinkedIn</option>
             <option value="Email from Vizuara">Email from Vizuara</option>
@@ -411,98 +357,164 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Anything else you'd like us to know?</label>
-          <textarea name="additional_notes" rows="3" placeholder="Optional"></textarea>
+          <label class="form-label">Anything else?</label>
+          <textarea id="f-notes" rows="3" placeholder="Optional"></textarea>
         </div>
 
-        <button type="submit" class="submit-btn" id="submit-btn">Submit Application</button>
+        <button type="button" class="submit-btn" id="submit-btn" onclick="handleSubmit()">Submit Application</button>
       </form>
     </div>
 
-    <!-- Success -->
     <div class="success-msg" id="success-msg">
-      <div class="success-icon">✅</div>
+      <div class="success-icon">🎉</div>
       <h2>Application submitted!</h2>
-      <p>Thank you for your interest. We'll review your application and get back to you within 48 hours.</p>
-      <p style="margin-top:16px; font-size:13px; color:#737373;">
-        If you have questions, email <a href="mailto:raj@vizuara.ai" style="color:#7c3aed;">raj@vizuara.ai</a>
+      <p>Thank you for your interest in speaking at Vizuara Workshops.<br>We'll review your application and get back to you within 48 hours.</p>
+      <p style="margin-top:20px;font-size:14px;color:#737373;">
+        Questions? Email <a href="mailto:raj@vizuara.ai" style="color:#7c3aed;">raj@vizuara.ai</a>
       </p>
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     © 2026 Vizuara AI Labs ·
     <a href="https://vizuara.ai" target="_blank">vizuara.ai</a> ·
-    <a href="https://vizuaraai.github.io/inference-engineering-visual-guides/" target="_blank">Curriculum</a> ·
     <a href="https://www.youtube.com/@vizuara" target="_blank">YouTube</a>
   </footer>
 
+  <div class="toast" id="toast"></div>
+
   <script>
-    // ─── SUPABASE CONFIG ──────────────────────────────────────
-    // REPLACE these with your Supabase project values
-    const SUPABASE_URL = 'https://nujomdlpnppspssmdtdf.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51am9tZGxwbnBwc3Bzc21kdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODM1NjQsImV4cCI6MjA4OTU1OTU2NH0.M5W_nNFLlMhRevc8XuGu_AwEH38_kPy-MqYbcX8RMYc';
+    // ─── Supabase ──────────────────────────────────
+    const sb = window.supabase.createClient(
+      'https://nujomdlpnppspssmdtdf.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51am9tZGxwbnBwc3Bzc21kdGRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5ODM1NjQsImV4cCI6MjA4OTU1OTU2NH0.M5W_nNFLlMhRevc8XuGu_AwEH38_kPy-MqYbcX8RMYc'
+    );
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ─── Expertise options ─────────────────────────
+    const expertiseOptions = [
+      "LLM Inference & Serving",
+      "LLM Training & Pre-training",
+      "Quantization & Compression",
+      "GPU Architecture & CUDA",
+      "Generative AI Applications",
+      "Transformer Architecture",
+      "Edge / On-Device AI",
+      "Voice & Speech AI (ASR/TTS)",
+      "Computer Vision & VLMs",
+      "Diffusion Models & Image Gen",
+      "Fine-Tuning & RLHF",
+      "RAG & Retrieval Systems",
+      "AI Agents & Tool Use",
+      "MLOps & LLMOps",
+      "Distributed Training",
+      "Custom AI Hardware",
+      "ML Frameworks (PyTorch, MLX, JAX)",
+      "Production ML Systems",
+    ];
 
-    // ─── Checkbox toggle ──────────────────────────────────────
-    function toggleCheck(el) {
-      const cb = el.querySelector('input[type="checkbox"]');
-      cb.checked = !cb.checked;
-      el.classList.toggle('checked', cb.checked);
+    const grid = document.getElementById('expertise-grid');
+    expertiseOptions.forEach(opt => {
+      const el = document.createElement('div');
+      el.className = 'cb-item';
+      el.dataset.value = opt;
+      el.innerHTML = `<div class="cb-box"><span class="cb-check">✓</span></div><span>${opt}</span>`;
+      el.addEventListener('click', () => el.classList.toggle('active'));
+      grid.appendChild(el);
+    });
+
+    // ─── Toast ─────────────────────────────────────
+    function showToast(msg, isError) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.className = 'toast show' + (isError ? ' error' : '');
+      setTimeout(() => t.className = 'toast', 4000);
     }
 
-    // ─── Form submission ──────────────────────────────────────
-    document.getElementById('speaker-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // ─── Validation ────────────────────────────────
+    function clearErrors() {
+      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+    }
+
+    function showError(fieldId, errId) {
+      document.getElementById(fieldId).classList.add('error');
+      document.getElementById(errId).style.display = 'block';
+      return false;
+    }
+
+    // ─── Submit ────────────────────────────────────
+    async function handleSubmit() {
+      clearErrors();
+      let valid = true;
+
+      const name = document.getElementById('f-name').value.trim();
+      const email = document.getElementById('f-email').value.trim();
+      const company = document.getElementById('f-company').value.trim();
+      const role = document.getElementById('f-role').value.trim();
+      const experience = document.getElementById('f-experience').value;
+      const topic = document.getElementById('f-topic').value.trim();
+      const format = document.getElementById('f-format').value;
+
+      const expertise = [];
+      document.querySelectorAll('.cb-item.active').forEach(el => expertise.push(el.dataset.value));
+
+      if (!name) { valid = showError('f-name', 'err-name'); }
+      if (!email || !email.includes('@')) { valid = showError('f-email', 'err-email'); }
+      if (!company) { valid = showError('f-company', 'err-company'); }
+      if (!role) { valid = showError('f-role', 'err-role'); }
+      if (!experience) { valid = showError('f-experience', 'err-experience'); }
+      if (expertise.length === 0) {
+        document.getElementById('err-expertise').style.display = 'block';
+        valid = false;
+      }
+      if (!topic) { valid = showError('f-topic', 'err-topic'); }
+      if (!format) { valid = showError('f-format', 'err-format'); }
+
+      if (!valid) {
+        showToast('Please fill in all required fields.', true);
+        const firstErr = document.querySelector('.error, .error-text[style*="block"]');
+        if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
       const btn = document.getElementById('submit-btn');
       btn.disabled = true;
       btn.textContent = 'Submitting...';
 
-      const form = e.target;
-      const expertise = [];
-      form.querySelectorAll('#expertise-grid input[type="checkbox"]:checked').forEach(cb => {
-        expertise.push(cb.value);
-      });
-
-      if (expertise.length === 0) {
-        alert('Please select at least one area of expertise.');
-        btn.disabled = false;
-        btn.textContent = 'Submit Application';
-        return;
-      }
-
       const data = {
-        full_name: form.full_name.value.trim(),
-        email: form.email.value.trim(),
-        linkedin_url: form.linkedin_url.value.trim() || null,
-        company: form.company.value.trim(),
-        role: form.role.value.trim(),
+        full_name: name,
+        email: email,
+        linkedin_url: document.getElementById('f-linkedin').value.trim() || null,
+        company: company,
+        role: role,
         expertise_areas: expertise,
-        suggested_topic: form.suggested_topic.value.trim(),
-        topic_description: form.topic_description.value.trim() || null,
-        preferred_dates: form.preferred_dates.value.trim() || null,
-        session_format: form.session_format.value,
-        bio: form.bio.value.trim() || null,
-        website_url: form.website_url.value.trim() || null,
-        how_heard: form.how_heard.value || null,
-        additional_notes: form.additional_notes.value.trim() || null,
+        suggested_topic: topic,
+        topic_description: document.getElementById('f-topic-desc').value.trim() || null,
+        preferred_dates: document.getElementById('f-dates').value.trim() || null,
+        session_format: format,
+        bio: document.getElementById('f-bio').value.trim() || null,
+        website_url: document.getElementById('f-website').value.trim() || null,
+        how_heard: document.getElementById('f-how').value || null,
+        additional_notes: [
+          experience ? 'Experience: ' + experience : '',
+          document.getElementById('f-notes').value.trim()
+        ].filter(Boolean).join(' | ') || null,
       };
 
       try {
-        const { error } = await supabase.from('speakers').insert([data]);
+        const { error } = await sb.from('speakers').insert([data]);
         if (error) throw error;
 
         document.getElementById('form-card').style.display = 'none';
         document.getElementById('success-msg').style.display = 'block';
         window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('Application submitted successfully!', false);
       } catch (err) {
-        alert('Something went wrong. Please try again or email raj@vizuara.ai directly.\n\nError: ' + err.message);
+        showToast('Something went wrong: ' + err.message, true);
         btn.disabled = false;
         btn.textContent = 'Submit Application';
       }
-    });
+    }
   </script>
 </body>
 </html>
